@@ -1,0 +1,28 @@
+{"nome_mapa" : "Mapa3",
+	"caminhos":[	
+{		"nome":"a",
+		"x":65,
+		"y":98,
+		"ligacoes":["c","b","d"],
+		"ligacoes_distancias":[77.52,303.92,74.43]
+	},	
+{		"nome":"b",
+		"x":366,
+		"y":140,
+		"ligacoes":["a","d"],
+		"ligacoes_distancias":[303.92,237.03]
+	},	
+{		"nome":"c",
+		"x":74,
+		"y":175,
+		"ligacoes":["a","d"],
+		"ligacoes_distancias":[77.52,67.42]
+	},	
+{		"nome":"d",
+		"x":129,
+		"y":136,
+		"ligacoes":["a","c","b"],
+		"ligacoes_distancias":[74.43,67.42,237.03]
+	}
+	]
+}
