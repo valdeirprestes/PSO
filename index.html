@@ -4,542 +4,81 @@
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="style.css"></link>
 		<script type="text/javascript" src="pso.js"></script>
+		<script type="text/javascript" src="scripts.js"></script>
 
 
 		<title> Trabalho MOA - PSO caixeiro viajante</title>
 	</head>
-
-
-
-
-
 	<body>
-		Mapa<input type="text" id="mapa_nome" size="10">
-		<div id="adicoes" >	
-			<button onclick="addPosicao();" >Add</button>
-			Nome:<input  type="text" id="addnome" size="10"> 
-			<button onclick="clickRemover()">Remover </button>
-			<input type="text" id="remover" size="10">
+		<div id="principal" class="principal">
+			<div class="descricao">
+				O PSO ( Particle Swarm Optmization), que traduzindo é chamado de otimização por enxame de partículas, é um algoritmo que busca um solução otima em um espaço de busca, através de troca de informações entre os indivíduos de uma população que determina cada trajetória de cada individuo baseado nos seus vizinhos mais próximo.<br>
+Ele simula o comportamento de certos animais como passaros e peixes na busca coletiva por alimento, proteção de predadores e caminhos de migração.
+Criado por James Kennedy e Russell Eberhart, encontra-se, atualmente, entre as meta-heurísticas de algoritmos de otimização baseadas em padrões da natureza.<br>
+<img  src="equacao.png"></img><br>
+x[] - Vetor da posição de cada particula. <br>
+v[] - vetor da  velocidade de cada particula.<br>
+p - pbest melhor posição encontrada pelo indíviduo (particula). <br>
+g - gbest melhor posição encontrada por todos indívuos (particulas). <br>
+c1, c2 - Parâmetros cognitivos individual e social. <br>
+w - inércia do deslocamento sobre posição (x) e velocidade (v) de cada individuo. <br>
+r1 e r2 - números aleátorio entre 0 e 1 (utilizado para o algoritmo não cair em minimos locais e ter maior possibilidade de resultados). <br>
+O problema a ser solucionado ao lado é o problema do caixeiro viajante, onde ele precisa percorre todas as cidades(vertices) e retornar na cidade origem, repetir um caminho (aresta) <br>
 
-		</div>
+Referência<br>
+<a class="ref" href="https://en.wikipedia.org/wiki/Particle_swarm_optimization"> Optimização por enxame de partículas(wikipedia) </a>
+<br>
+<a class="ref" href= "https://computacaointeligente.com.br/algoritmos/otimizacao-por-enxame-de-particulas/">Otimização por enxame de partículas - PSO </a>
+<br>
+<a class="ref" href="https://en.wikipedia.org/wiki/Travelling_salesman_problem"> Problema do caixeiro Viajante</a>
+			</div>
 
-		<div id="canvas">
-			<canvas id="meucanvas" onclick="pegarPosicaoMouse()" >
-			</canvas>
-		</div>
-		<div id="status">
-			<p id="pstatus"></p>
-		</div>
-		<div id="controles">
-			<input type="file" id="abrir-arquivo" onchange="direcionarDados(event)" style="display:none;"	 >
-			<input type="file" id="salvar-arquivo"  style="display:none;"	>
-			<button onclick="CarregarMapa();" >Carregar Mapa</button>
-			<button onclick="salvarMapa();" >Salvar Mapa</button>
-			<label>Mapas</label>
-			<select id="mapas" name="" onchange=mudarMapa();>
-				<option value="mapa1">mapa1</option>
-				<option value="mapa2">mapa2</option>
-				<option value="mapa3">mapa3</option>
-			</select>
-			<input onclick="verificar_rotulos();" type="checkbox" id="ver_rotulo" checked><label>Rotulo</label>
-		</div>
-			<div id="comandos">
-				<fieldset>
-					<legend>Comandos</legend>
-					<button onclick="executarPSO();">Rodar PSO</button>
-					<label>População</label><input id="num_populacao" type="number" size="10">
-					<label>Interações</label><input id="num_interacoes" type="number" size="10">
-				</fieldset>
+			<div id="canvasdiv" class="canvasdiv">
+				<div id="erro"> </div>
+				Mapa<input type="text" id="mapa_nome" >
+				<div id="adicoes" >	
+					<button onclick="addPosicao();" >Add</button>
+					<button onclick="clickRemover()">Remover </button>
+					<input  type="text" id="nomeselecionado" >
+					<button onclick="setDistancia();">Distancia</button>
+					<input type="text" id="tamselecionado" >
+					<div id="status_mouse" ></div>
+				</div>
+
+				<canvas id="meucanvas" onclick="pegarPosicaoMouse();" onmousemove="statusMouse();">
+				</canvas>
+
+				<div id="status">
+					<p id="pstatus"></p>
+				</div>
+
+				<div id="controles">
+					<input type="file" id="abrir-arquivo" onchange="direcionarDados(event)" style="display:none;"	 >
+					<input type="file" id="salvar-arquivo"  style="display:none;"	>
+					<button onclick="CarregarMapa();" >Carregar Mapa</button>
+					<button onclick="salvarMapa();" >Salvar Mapa</button>
+					<label>Mapas</label>
+					<select id="mapas" name="" onchange=mudarMapa();>
+						<option value="mapa1">mapa1</option>
+						<option value="mapa2">mapa2</option>
+						<option value="mapa3">mapa3</option>
+					</select>
+					<input onclick="verificar_rotulos();" type="checkbox" id="ver_rotulo" checked><label>Rotulo</label>
+				</div>
+				<div id="comandos">
+					<fieldset>
+						<legend>Comandos</legend>
+						<button onclick="executarPSO();">Rodar PSO</button>
+						<label>População</label><input id="num_populacao" type="number" >
+						<label>Interações</label><input id="num_interacoes" type="number" >
+					</fieldset>
+				</div>
 			</div>
-			<div id="resolucao">
-			
+			<div id="resolucao" class="resolucao">
+
 			</div>
+		</div>
 	</body>
 	<script type="text/javascript">
-		/*		window.onload = function(){
-		hello();
-	  }*/
-		function mudarMapa(){
-					let selecionado = document.getElementById("mapas");
-					if(selecionado.value == "mapa1")
-						facaMapa1();
-					else if(selecionado.value == "mapa2")
-						facaMapa2();
-					else
-						facaMapa3();
-		}
-		function verificar_rotulos(){
-					let rvertice = document.getElementById("ver_rotulo");
-					console.log(rvertice);
-					if(rvertice.checked == true){
-								rotulo_vertice = true;
-								rotulo_aresta = true;
-							}
-					else{
-								rotulo_vertice = false;
-								rotulo_aresta = false;
-							}
-					atualizarCanvas();
-				}
-		function clickRemover(){
-					if(selectVertice.length > 0){
-								let index = mapa.busca(campo_remover.value);
-								if(index >= 0){
-											mapa.removePorNome(campo_remover.value);	
-										}
-							}else if(selectAresta > 0){
-									}
-					atualizarCanvas();
-
-				}
-		function setMapa(string_json){
-					mapa = new Espaco(500,500);
-					const json = JSON.parse(string_json);
-					//console.log(json);
-					mapa_nome.value = json.nome_mapa;
-					for( let i = 0; i < json.caminhos.length; i++)
-					{
-								mapa.addCaminho(new Caminho( json.caminhos[i].nome,
-										  	json.caminhos[i].x, json.caminhos[i].y,
-										  	json.caminhos[i].ligacoes,
-											json.caminhos[i].ligacoes_distancias));
-							}	
-					atualizarCanvas();
-
-				}
-
-		function direcionarDados(e){
-					let arquivo = e.target.files[0];
-					let string_json;
-					if(!arquivo)
-						return;
-					let dados = new FileReader();
-					dados.onload = function(e){
-								string_json = e.target.result;
-								//	console.log(string_json);
-								setMapa(e.target.result);
-
-							}
-					dados.readAsText(arquivo);
-				}
-
-		function salvarMapa(){
-
-					if(mapa_nome.value.length < 1){
-								alert("Colocar o nome do mapa");
-								return;
-							}
-					//alert(mapa_nome.value);
-					let stringGravar = "{\"nome_mapa\" : \"" + mapa_nome.value + "\",\n";
-					if(mapa.caminhos.length > 0 ){
-								stringGravar = stringGravar + "\t\"caminhos\":[";
-								for(let i = 0 ; i < mapa.caminhos.length; i++)
-								{
-											if(i > 0 ) stringGravar = stringGravar + ",";
-											stringGravar = stringGravar + "\t\n{"
-											stringGravar = stringGravar + "\t\t\"nome\":\"" + mapa.caminhos[i].nome + "\",\n";
-											stringGravar = stringGravar + "\t\t\"x\":"+ mapa.caminhos[i].x + ",\n";
-											stringGravar = stringGravar + "\t\t\"y\":"+ mapa.caminhos[i].y + ",\n";
-											stringGravar = stringGravar + "\t\t\"ligacoes\":[" ;
-											for(let x = 0; x < mapa.caminhos[i].ligacoes.length; x++)
-											{	if(x > 0) stringGravar= stringGravar + ",";
-														stringGravar = stringGravar + "\"" + mapa.caminhos[i].ligacoes[x] + "\"";
-													}
-											stringGravar = stringGravar + "],\n";
-											stringGravar = stringGravar + "\t\t\"ligacoes_distancias\":[";
-											for(let x = 0; x < mapa.caminhos[i].ligacoes.length; x++)
-											{	if(x > 0) stringGravar= stringGravar + ",";
-														stringGravar = stringGravar +  mapa.caminhos[i].ligacoes_distancias[x] ;
-													}
-											stringGravar = stringGravar + "]\n"
-											stringGravar = stringGravar + "\t}";
-
-										}
-								stringGravar = stringGravar + "\n\t]"
-							}
-
-					stringGravar = stringGravar+ "\n}";
-
-					console.log(stringGravar);
-					const file = new Blob([stringGravar], { type: 'text/plain' });
-					const link = document.createElement("a");
-					link.href = URL.createObjectURL(file);
-					link.download = "Mapa.json";
-					link.click();
-					return URL.revokeObjectURL(link.href);
-				}
-
-
-		function CarregarMapa(){
-					let inputfile = document.getElementById("abrir-arquivo");
-					let strFile ;
-					inputfile.click();
-					strFile = inputfile.files[0].nome;
-					let leitor = new FileReader();
-				}
-
-		function desenhaLinha( coordenada1, coordenada2){
-					//	let canvas = document.getElementById("meucanvas");
-					//	let contexto = canvas.getContext("2d");
-					if(coordenada1.localizado == false || coordenada2.localizado == false)
-						return;
-					let x_r, y_r, distancia;
-					let index;
-					if(rotulo_aresta ){
-								//		distancia = parseFloat(mapa.distanciaEuclidianaAparaB(coordenada1, coordenada2)).toFixed(2);
-								index = coordenada1.ligacoes.indexOf(coordenada2.nome);
-								distancia = coordenada1.ligacoes_distancias[index];
-								x_r = (coordenada2.x + coordenada1.x) /2;
-								y_r= x_r * mapa.coeficienteAngular(coordenada1, coordenada2) + mapa.coeficienteLinear(coordenada1,coordenada2); 
-								contexto.font = "18px Arial";
-								contexto.fillStyle = "black";
-								//console.log("x_r", x_r, "y_r", y_r - 10);
-								contexto.fillText(distancia, x_r, y_r);
-							}
-					//canvas ele não ao ser carregado 
-					//	canvas.width = canvas.offsetWidth;
-					// canvas.height = canvas.offsetHeight;
-
-					//define um new path
-					contexto.beginPath();
-					// define inicio
-					contexto.moveTo(coordenada1.x, coordenada1.y);
-					//console.log("coor1.x",coordenada1.x,"coor1.y", coordenada1.y)
-					//console.log("coor2.x", coordenada2.x,"coor2.y", coordenada2.y)
-
-					//define fim da linha
-					contexto.lineTo(coordenada2.x, coordenada2.y);
-					//Desenha a linha
-					//contexto.stroke();
-					contexto.closePath();
-					contexto.fill();
-
-					contexto.stroke();
-					//console.log("desenhaLinha()")
-				}
-
-		function desenhaGrid(){
-					let canvas = document.getElementById("meucanvas");
-					let contexto = canvas.getContext("2d");
-					canvas.width = canvas.offsetWidth;
-					canvas.height = canvas.offsetHeight;
-					canvas.width = 200;
-					canvas.height = 100;
-					let largura = parseInt(canvas.width/20);
-					let inicioY = canvas.height;
-					let inicioX = canvas.width;
-					contexto.beginPath();
-					for(let i = 0; i < canvas.width + largura ; i = i + largura)
-					{
-								console.log(largura)
-								console.log("inicio", i,0)
-								console.log("fim", i,inicioY)
-								contexto.moveTo(i, 0);
-								contexto.lineTo( i, inicioY);
-							}
-					for(let i = 0 ; i < canvas.height ; i += largura)
-					{
-								contexto.moveTo(0, i);
-								contexto.lineTo(inicioX, i);
-							}
-
-					contexto.stroke();
-
-				}
-
-		function desenhaCirculo(caminho, cor){
-					if(caminho.localizado == false)
-						return;
-					let x_r, y_r;
-					if(rotulo_vertice ){
-								contexto.font = "20px Arial";
-								contexto.fillStyle = "black";
-								contexto.fillText(caminho.nome, caminho.x, caminho.y-10);
-							}
-
-					if(selectVertice.indexOf(caminho.nome) >= 0){
-								contexto.beginPath();
-								contexto.arc(caminho.x, caminho.y, 8, 0 , 2 * Math.PI);
-								contexto.closePath();
-								contexto.fillStyle = "black";
-								contexto.fill();
-								contexto.stroke();
-							}
-
-					contexto.beginPath();
-					//arc( X, Y, raio, inicio_circulo , fim_circulo)
-					contexto.arc(caminho.x , caminho.y , 5, 0, 2 * Math.PI);
-					contexto.closePath();
-					// adicionar uma cor
-					//	contexto.fillStyle = cor;
-					//console.log("desenhaCirculo x", caminho.x,"y", caminho.y, "cor", cor);
-					//	contexto.strokefill = cor;
-					contexto.fillStyle = cor;
-					contexto.fill();
-					contexto.stroke();
-				}
-		function espera(tempo){
-					let inicio = new Date().getTime();
-					let fim = inicio;
-					while(fim < inicio + tempo) {
-								fim = new Date().getTime();
-							}
-				}
-
-		function desenhaCirculo2(caminho, cor){
-					contexto.beginPath();
-					//arc( X, Y, raio, inicio_circulo , fim_circulo)
-					contexto.arc(caminho.x , caminho.y , 5, 0, 2 * Math.PI);
-					contexto.closePath();
-					// adicionar uma cor
-					//	contexto.fillStyle = cor;
-					//	console.log("desenhaCirculo x", caminho.x,"y", caminho.y, "cor", cor);
-					//	contexto.strokefill = cor;
-					contexto.fillStyle = cor;
-					contexto.fill();
-					contexto.stroke();
-				}
-		function addPosicao(){
-					let nome = document.getElementById("addnome").value;
-					//console.log("nome", nome);
-					let teste = mapa.busca(nome);
-					//console.log("teste para inserção" , teste);
-					if(  teste == null )
-						mapa.addCaminho(new Caminho(nome, posicaoMouse.x, posicaoMouse.y, [],[]));
-					//console.log("Mouse ", posicaoMouse.x, "x",posicaoMouse.y);
-					atualizarCanvas();
-
-				}
-
-		function pegarPosicaoMouse(){
-					let canvas = document.getElementById("meucanvas");
-					let rect = canvas.getBoundingClientRect();
-					posicaoMouse.x = event.clientX - rect.left ; //- event.offsetX ; //event.pageX;
-					posicaoMouse.y = event.clientY - rect.top; //- event.offsetY;
-
-					//esta num ponto
-					let testevertice = false;
-					let testearesta = false;
-					let vertice = "";
-					let aresta = [];
-					let distancia;
-					for(let i = 0; i< mapa.caminhos.length; i++)
-					{
-								distancia = mapa.distanciaEuclidianaAparaB(posicaoMouse, mapa.caminhos[i]);
-								//console.log("distancia", distancia);
-								if( distancia <=5 ){
-											vertice = mapa.caminhos[i].nome;
-											testevertice = true;
-											break;
-										}
-							}
-					if( testevertice ==false){
-							}
-
-
-					if(testevertice){
-								selectVertice.push(vertice);
-								selectAresta = [];
-								campo_remover.value = vertice; 
-								if(selectVertice.length > 1){
-											let caminho1 = mapa.busca(selectVertice[0]);
-											let caminho2 = mapa.busca(selectVertice[1]);
-											//console.log("caminho1", caminho1,"caminho2",caminho2);
-											distancia = mapa.distanciaEuclidianaAparaB(mapa.caminhos[caminho1],mapa.caminhos[caminho2]);
-											if( mapa.caminhos[caminho1].ligacoes.indexOf(selectVertice[0]) < 0){
-											//			console.log("mapa.caminhos[caminho1]", mapa.caminhos[caminho1]);
-														mapa.caminhos[caminho1].ligacoes.push(selectVertice[1]);
-											//			console.log("mapa.caminhos[caminho1]", mapa.caminhos[caminho1]);
-														mapa.caminhos[caminho1].ligacoes_distancias.push(distancia.toFixed(2));
-
-													}
-											if( mapa.caminhos[caminho2].ligacoes.indexOf(selectVertice[1]) < 0){
-											//			console.log("mapa.caminhos[caminho2]", mapa.caminhos[caminho2]);
-														mapa.caminhos[caminho2].ligacoes.push(selectVertice[0]);
-											//			console.log("mapa.caminhos[caminho2]", mapa.caminhos[caminho2]);
-														mapa.caminhos[caminho2].ligacoes_distancias.push(distancia.toFixed(2));
-													}
-
-											selectVertice = []
-											campo_remover.value = "";
-										}
-								atualizarCanvas();
-							}else if(testearesta){
-										selectAresta.push(aresta);
-										selectVertice = []
-										atualizarCanvas();
-									}
-					if(testevertice == false && testearesta == false){
-								selectVertice = []
-								selectAresta = []
-								campo_remover.value = "";
-								campo_nomeAdd.value = "";
-								atualizarCanvas();
-								desenhaCirculo(posicaoMouse , "black");
-							}
-				}
-		function atualizarCaminhosNoCanvas(){
-					//		contexto.beginPath()
-					for(let i = 0 ; i < mapa.caminhos.length ; i++)
-					{
-								//console.log("desenha x", mapa.caminhos[i].x, "y", mapa.caminhos[i].y);
-								//			contexto.beginPath()
-								desenhaCirculo(mapa.caminhos[i], "orange");
-								let index;
-								for( let l = 0; l < mapa.caminhos[i].ligacoes.length; l++)
-								{
-											//console.log("l", mapa.caminhos[i].ligacoes[l]);
-											index = mapa.busca( mapa.caminhos[i].ligacoes[l] );
-											//console.log("index", index);
-											//console.log(mapa.caminhos[i]);
-											//console.log(mapa.caminhos[index]);
-											//console.log(mapa.caminhos[index]);
-											if(index != null )
-												desenhaLinha(mapa.caminhos[i], mapa.caminhos[index] );			
-										}
-
-								//			contexto.closePath();
-								//contexto.fill();
-							}
-					//contexto.stroke();
-				}
-
-		function atualizarParticulas(){
-					for (let i= 0; i< mapa.particulas.length ; i++){
-								desenhaCirculo2(mapa.particulas[i], "yellow");
-							}
-				}
-		function atualizarCanvas(){
-					let div_resolucao = document.getElementById("resolucao");
-					div_resolucao.innerHTML	= "";
-					//contexto.beginPath()
-					contexto.clearRect(0,0, canvas.width, canvas.height);
-					atualizarCaminhosNoCanvas();
-					atualizarParticulas();
-					//	contexto.fill();
-					//	contexto.stroke();
-				}
-
-		function executarPSO(){
-					let num_populacao = document.getElementById("num_populacao").value;
-					let num_interacoes = document.getElementById("num_interacoes").value;
-					let div_resolucao = document.getElementById("resolucao");
-					const exp_num = /[0-9]/;
-					if( !exp_num.test(num_populacao) && num_populacao.length < 1){
-								alert("Preencha o campo população com numero");
-								return;
-							}
-					if( !exp_num.test(num_interacoes) && num_interacoes.length < 1){
-								alert("Preencha o campo interações com numero");
-								return;
-							}
-					if( mapa.caminhos.length < 1){
-								alert("Você precisa ter carregar um mapa ou criar um antes de rodar o PSO");
-								return;
-							}
-
-					pso = new PSO(num_populacao , mapa , num_interacoes );
-					
-					pso.processar();
-					console.log(pso.g);
-					if(pso.g.length < 1)
-						div_resolucao.innerHTML	= "";
-					else{
-								let strHTML = "<table>";
-								strHTML += "<th>Menor distancia</th><th>PosicaoX</th><th>Caminho</th>"
-								for(let i= 0 ; i < pso.g.length ; i++){
-											strHTML += "<tr>";
-											strHTML += "<td>" + parseFloat(pso.g[i].menor).toFixed(2) + "</td>";
-											strHTML += "<td>" + pso.g[i].posicao+ "</td>";
-											strHTML += "<td>" + pso.g[i].caminho + "</td>";
-											strHTML += "</tr>";
-								}
-								strHTML += "</table>";
-								div_resolucao.innerHTML = strHTML;
-					}
-					
-				}
-		window.onload = function(){
-					//let c1 = new Coordenada(0,0);
-					//let c2 = new Coordenada(200,100);
-					//desenhaLinha(c1, c2);
-					//desenhaGrid();
-					//desenhaCirculo(250, 250 , "yellow");
-					canvas =  document.getElementById("meucanvas");
-					contexto = canvas.getContext("2d");
-					canvas.width = canvas.offsetWidth;
-					canvas.height = canvas.offsetHeight;
-					selectVertice = [];
-					selectAresta = [];
-					campo_remover = document.getElementById("remover");
-					campo_nomeAdd = document.getElementById("addnome");
-					mapa_nome = document.getElementById("mapa_nome");
-					campo_remover.value = "";
-					campo_nomeAdd.value = "";
-					mapa_nome.value="";
-					rotulo_aresta = true;
-					rotulo_vertice = true;
-				}
-		let canvas;
-		let contexto;
-		let mapa = new Espaco(500,500);
-		let posicaoMouse = new Caminho( 0, 0,[], []);
-		let selectVertice;
-		let selectAresta;
-		let campo_remover;
-		let campo_nomeAdd;
-		let mapa_nome;
-		let rotulo_aresta;
-		let rotulo_vertice;
-
-
-
-function facaMapa1(){
-			mapa = new Espaco();
-			caminho = new Caminho("a",65,98,["c","b","d"],[77.52,303.92,74.43]);
-			mapa.addCaminho(caminho);
-
-			caminho = new Caminho("b",366,140,["a","d"],[303.92,237.03]);
-			mapa.addCaminho(caminho);
-
-			caminho = new Caminho("c",74,175,["a","d"],[77.52,67.42]);	
-			mapa.addCaminho(caminho);
-
-			caminho = new Caminho("d",129,136,["a","c","b"],[74.43,67.42,237.03]);
-			mapa.addCaminho(caminho);
-
-			atualizarCanvas();
-}
-function facaMapa2(){
-		mapa = new Espaco();
-		caminho = new Caminho("a",105, 78,  ["c","e","f","b","d"],[123.11,237.47,321.50,183.00,291.62]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("b", 288, 78, ["c","a","e","f","d"],[281.76,183.00,290.50,247.17,125.25]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("e", 120, 315,["c","a","b","d","f"],[177.23,237.47,290.50,309.90,192.21]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("f", 312, 324, ["c","a","b","d","e"], [330.18,321.50,247.17,183.58,192.21]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("c", 21, 168, ["a","b","d","f","e"], [123.11,281.76,365.20,330.18,177.23]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("d", 386, 156, ["c","a","b","e","f"],[365.20,291.62,125.25,309.90,183.58]);
-		mapa.addCaminho(caminho);
-		atualizarCanvas();
-}
-
-function facaMapa3(){
-		mapa = new Espaco();
-		caminho = new Caminho("1", 40, 188, ["4","5","2"], [136.48,146.93,270.20]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("3", 328, 193,["5","4","2"], [194.59,152.32,264.20]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("4", 98, 323, ["1","5","3"], [146.93,170.29,219.74]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("5", 268, 333,["3","4","1"], [152.32,170.29,270.20]);
-		mapa.addCaminho(caminho);
-		caminho = new Caminho("2", 130,133, ["1","3"], [105.48,206.89]);
-		mapa.addCaminho(caminho);
-		atualizarCanvas();
-}
 	</script>
 </html>

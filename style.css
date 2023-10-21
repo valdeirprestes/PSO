@@ -1,5 +1,29 @@
 body{
+}
+
+div.principal{
+	height: 100%;
 	background-color : azure;
+   display : flex;
+	flex-direction : row;
+}
+div.descricao{
+	width:550px;
+	background-color : black;
+	color : white;
+}
+div.canvasdiv{
+	 width : 550px;
+	 height: 700px;
+	 background-color : LightGray;
+	 border : 1px solid black;
+	 padding: 10px;
+}
+
+div.resolucao{
+	width : auto;
+	height: auto;
+	background-color: AliceBlue;
 }
 
 #meucanvas{
@@ -8,19 +32,46 @@ body{
 	border: 1px solid black;
 	background-color : white;
 }
-
-body, html{
-	height: 100%;
+label, input{
+	width:100px;
+}
+fieldset{
+	width : 500px;
+}
+td{
+	padding: 5px 20px;
 }
 th{
 	text-align: center;
-
+	background-color : black;
+	color : white;
 }
 
+tr:nth-child(even) {
+	background: #CCC;
+	color : black 
+}
+tr:nth-child(odd) {
+	background: DimGray;
+	color : #CCC;
+}
 
 table{
 	text-align: center;
 	border-color: black;
-	border-spacing: 15px 10px;
-	border: 1px solid;
+	border-spacing: 0px;
+}
+#erro{
+	text: 1px solid bold;
+	color : red;
+}
+
+a.ref:visited{
+	color : blue;
+	text: 20px solid bold;
+}
+
+img{
+	display: block;
+	margin: 0px auto;
 }

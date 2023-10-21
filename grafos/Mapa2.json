@@ -3,26 +3,26 @@
 {		"nome":"1",
 		"x":40,
 		"y":188,
-		"ligacoes":["4","5","2"],
-		"ligacoes_distancias":[136.48,146.93,270.20]
+		"ligacoes":["2","4","5"],
+		"ligacoes_distancias":[105.48,146.93,270.2]
 	},	
 {		"nome":"3",
 		"x":328,
 		"y":193,
-		"ligacoes":["5","4","2"],
-		"ligacoes_distancias":[194.59,152.32,264.20]
+		"ligacoes":["5","2","4"],
+		"ligacoes_distancias":[152.32,206.89,264.2]
 	},	
 {		"nome":"4",
 		"x":98,
 		"y":323,
 		"ligacoes":["1","5","3"],
-		"ligacoes_distancias":[146.93,170.29,219.74]
+		"ligacoes_distancias":[146.93,170.29,264.2]
 	},	
 {		"nome":"5",
 		"x":268,
 		"y":333,
-		"ligacoes":["3","4","1"],
-		"ligacoes_distancias":[152.32,170.29,270.20]
+		"ligacoes":["4","3","1"],
+		"ligacoes_distancias":[170.29,152.32,270.2]
 	},	
 {		"nome":"2",
 		"x":130,

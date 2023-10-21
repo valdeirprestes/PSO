@@ -1,0 +1,28 @@
+{"nome_mapa" : "facil",
+	"caminhos":[	
+{		"nome":"a",
+		"x":373,
+		"y":65,
+		"ligacoes":["b","d"],
+		"ligacoes_distancias":[226.72,273.54]
+	},	
+{		"nome":"b",
+		"x":419,
+		"y":287,
+		"ligacoes":["a","c"],
+		"ligacoes_distancias":[226.72,236.96]
+	},	
+{		"nome":"d",
+		"x":113,
+		"y":150,
+		"ligacoes":["a","c"],
+		"ligacoes_distancias":[208.36,273.54]
+	},	
+{		"nome":"c",
+		"x":159,
+		"y":337,
+		"ligacoes":["b","d"],
+		"ligacoes_distancias":[264.76,192.57]
+	}
+	]
+}
