@@ -1,4 +1,4 @@
-@media all and (hover:hover) and (min-width: 481px){
+@media  (hover:hover) and (min-width: 481px){
 div.principal{
 	height: 100%;
 	background-color : azure;
@@ -78,7 +78,7 @@ img{
 }
 
 }
-@media all and (hover:none) and (min-width:300px) and (max-width: 480px){
+@media (hover:none) and (min-width:300px) and (max-width: 480px){
 div.principal{
 	height: 100%;
 	background-color : azure;
