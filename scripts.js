@@ -19,14 +19,12 @@
 					div_resolucao.innerHTML	= "";
 					atualizarCanvas();
 
-		}
+	}
 	function SelecionarSolucao(path){
 		selectAresta =[];
 		caminhoSelecionado = Solucao(path);
 		tam_selecionado.value = tamDistanciaSelecionados2(caminhoSelecionado);
 		atualizarCanvas();
-		//caminhostr = []
-		
 	}
 	function Solucao(path){
 		let caminho_retornar;
@@ -43,19 +41,25 @@
 	}
 
 
-		function verificar_rotulos(){
-					let rvertice = document.getElementById("ver_rotulo");
-					if(rvertice.checked == true){
+	function verificar_rotulos_vertices(){
+					let rvertice = document.getElementById("ver_rotulo_vertices");
+					if(rvertice.checked == true)
 								rotulo_vertice = true;
-								rotulo_aresta = true;
-							}
-					else{
+					else
 								rotulo_vertice = false;
-								rotulo_aresta = false;
-							}
 					atualizarCanvas();
-				}
-		function	removePorNome(nome){
+	}
+	function verificar_rotulos_arestas(){
+					let rvertice = document.getElementById("ver_rotulo_arestas");
+					if(rvertice.checked == true)
+								rotulo_aresta = true;
+							
+					else
+								rotulo_aresta = false;
+					atualizarCanvas();
+	}
+
+	function	removePorNome(nome){
 					let index = this.busca(nome);
 					if(nome!= null){
 								mapa.splice(index,1);
@@ -65,7 +69,8 @@
 											if(index >= 0) mapa[i].ligacoes.splice(index,1);
 										}
 							}
-				}
+	}
+
 		function setDistancia(){
 						let copia;
 						let index;
@@ -90,8 +95,8 @@
 						else{
 							msg_erro.innerHTML = "Ajusta o tamanho de apenas uma  aresta selecionada";
 						}
-		}
-		function clickRemover(){
+	}
+	function clickRemover(){
 					let nome = document.getElementById("nomeselecionado");
 					if (selectAresta.length > 0){
 						let copia;
@@ -109,10 +114,8 @@
 								mapa[index].ligacoes.splice(index2,1);
 								mapa[index].ligacoes_distancias.splice(index2,1);
 								copia = [copia[1],copia[0]];
-								//console.log("copia", copia);
 								index = mapa.findIndex((obj)=> obj.nome.toString() == copia[0].toString());
 								index2 = mapa[index].ligacoes.findIndex((obj2)=> obj2 == copia[1]);
-								//console.log("index", index,"index2", index2);
 								if(index2 > -1){
 									mapa[index].ligacoes.splice(index2,1);
 									mapa[index].ligacoes_distancias.splice(index2,1);
@@ -120,8 +123,6 @@
 							}
 							selectAresta.splice(0,1);
 						}
-						//console.log("selectAresta", selectAresta);
-						//console.log("mapa", mapa);
 						tam_selecionado.value="";
 					}
 					else if(selectVertice.length > 0){
@@ -133,9 +134,9 @@
 									}
 					nome_selecionado.value = ""
 					atualizarCanvas();
+	}
 
-				}
-		function setMapa(string_json){
+	function setMapa(string_json){
 					mapa = [];
 					const json = JSON.parse(string_json);
 					mapa_nome.value = json.nome_mapa;
@@ -151,386 +152,323 @@
 					div_resolucao.innerHTML	= "";
 					atualizarCanvas();
 
-				}
+	}
 
-			function direcionarDados(e){
-						let arquivo = e.target.files[0];
-						let string_json;
-						if(!arquivo)
-							return;
-						let dados = new FileReader();
-						dados.onload = function(e){
-									string_json = e.target.result;
-									setMapa(e.target.result);
-
-								}
-						dados.readAsText(arquivo);
-					}
-
-			function salvarMapa(){
-
-						if(mapa_nome.value.length < 1){
-									alert("Colocar o nome do mapa");
-									return;
-								}
-						let stringGravar = "{\"nome_mapa\" : \"" + mapa_nome.value + "\",\n";
-						if(mapa.length > 0 ){
-									stringGravar = stringGravar + "\t\"caminhos\":[";
-									for(let i = 0 ; i < mapa.length; i++)
-									{
-												if(i > 0 ) stringGravar = stringGravar + ",";
-												stringGravar = stringGravar + "\t\n{"
-												stringGravar = stringGravar + "\t\t\"nome\":\"" + mapa[i].nome + "\",\n";
-												stringGravar = stringGravar + "\t\t\"x\":"+ mapa[i].x + ",\n";
-												stringGravar = stringGravar + "\t\t\"y\":"+ mapa[i].y + ",\n";
-												stringGravar = stringGravar + "\t\t\"ligacoes\":[" ;
-												for(let x = 0; x < mapa[i].ligacoes.length; x++)
-												{	if(x > 0) stringGravar= stringGravar + ",";
-															stringGravar = stringGravar + "\"" + mapa[i].ligacoes[x] + "\"";
-														}
-												stringGravar = stringGravar + "],\n";
-												stringGravar = stringGravar + "\t\t\"ligacoes_distancias\":[";
-												for(let x = 0; x < mapa[i].ligacoes.length; x++)
-												{	if(x > 0) stringGravar= stringGravar + ",";
-															stringGravar = stringGravar +  mapa[i].ligacoes_distancias[x] ;
-														}
-												stringGravar = stringGravar + "]\n"
-												stringGravar = stringGravar + "\t}";
-
-											}
-									stringGravar = stringGravar + "\n\t]"
-								}
-
-						stringGravar = stringGravar+ "\n}";
-						const file = new Blob([stringGravar], { type: 'text/plain' });
-						const link = document.createElement("a");
-						link.href = URL.createObjectURL(file);
-						link.download = "Mapa.json";
-						link.click();
-						return URL.revokeObjectURL(link.href);
-					}
-
-
-			function CarregarMapa(){
-						let inputfile = document.getElementById("abrir-arquivo");
-						let strFile ;
-						inputfile.click();
-						if(inputfile.files > 0){
-							strFile = inputfile.files[0].nome;
-							let leitor = new FileReader();
-						}
-					}
-			function distanciaEuclidianaAparaB(a, b){ //distancia entre dois caminhos conectados
-						let distancia = Math.sqrt(Math.pow((b.x - a.x),2) + Math.pow((b.y - a.y),2) ); 
-						return parseFloat(distancia);		//}else{
-					}
-			function coeficienteAngular(a,b){
-						let angulo = (b.y - a.y) / (b.x - a.x);
-						if (angulo == Number.POSITIVE_INFINITY)
-							angulo =0;
-						return angulo;
-			}
-			function coeficienteLinear(a,b){
-						let ca = coeficienteAngular(a,b);
-						return a.y - (ca * a.x);
-					}
-			function yfuncaoXAB(a, b, x){
-						//console.log("YFUNCAOB a.x", a.x,"a.y",a.y, "b.x", b.x,"b.y", b.y);
-						return (x * coeficienteAngular(a, b)) + coeficienteLinear(a, b);
-					}
-			function xfuncaoXAB(a, b, y){
-						//console.log("XFUNCAOB a.x", a.x,"a.y",a.y, "b.x", b.x,"b.y", b.y);
-						let resultado = (y - coeficienteLinear(a,b)) / coeficienteAngular(a,b);
-						if(resultado == Number.POSITIVE_INFINITY)
-								resultado = 0;
-						return resultado; 
-					}
-
-			function desenhaLinha( coordenada1, coordenada2){
-						if(coordenada1.localizado == false || coordenada2.localizado == false)
-							return;
-						let x_r, y_r, distancia;
-						let index;
-						let selection;
-						let selection2;
-						let cordsel;
-						let cordsel2;
-						cordsel = [coordenada1.nome, coordenada2.nome];
-						cordsel2 = [coordenada2.nome, coordenada1.nome];
-						//console.log("DESENHALINHA(227) selection",selection, "cordsel", cordsel, "selectAresta", selectAresta);
-						//console.log("caminhoSelecionado", caminhoSelecionado); 
-						selection = caminhoSelecionado.findIndex((obj)=> obj.toString() == cordsel.toString());
-						selection1 = selectAresta.findIndex((obj)=> obj.toString() == cordsel.toString());
-						if(selection1 == -1)
-							selection1 = selectAresta.findIndex((obj)=> obj.toString() == cordsel2.toString());
-						if(selection == -1)
-							selection = caminhoSelecionado.findIndex((obj)=> obj.toString() == cordsel2.toString());
-							
-						if(rotulo_aresta ){
-									index = coordenada1.ligacoes.indexOf(coordenada2.nome);
-									distancia = coordenada1.ligacoes_distancias[index];
-									x_r = (coordenada2.x + coordenada1.x) /2;
-									y_r= x_r * coeficienteAngular(coordenada1, coordenada2) + coeficienteLinear(coordenada1,coordenada2); 
-									contexto.font = "18px Arial";
-						//			if(selection >= 0 || selection2>=0)
-						//				contexto.fillStyle = "yellow";
-						//			else
-									//	contexto.fillStyle = "black";
-									contexto.fillStyle = "black";
-									contexto.fillText(distancia, x_r, y_r);
-								}
-						contexto.beginPath();
-						contexto.moveTo(coordenada1.x, coordenada1.y);
-
-						contexto.lineTo(coordenada2.x, coordenada2.y);
-						if(selection >= 0 ){
-							contexto.strokeStyle = "green";
-							contexto.lineWidth = 3;
-						}
-						else if (selection1 >= 0){
-							contexto.strokeStyle = "yellow";
-							contexto.lineWidth = 2;
-						}
-						else{
-							contexto.lineWidth = 0.1;
-							contexto.strokeStyle = "gray";
-							//console.log("linha black", coordenada1.nome, coordenada2.nome);
-							//console.log("selection1", selection1);
-							//console.log("cordsel", cordsel, "\ncordsel", cordsel2);
-							//console.log("selectAresta", selectAresta);		
-						}
-
-						contexto.closePath();
-						contexto.fill();
-
-						contexto.stroke();
-					}
-
-			function desenhaGrid(){
-						let canvas = document.getElementById("meucanvas");
-						let contexto = canvas.getContext("2d");
-						canvas.width = canvas.offsetWidth;
-						canvas.height = canvas.offsetHeight;
-						canvas.width = 200;
-						canvas.height = 100;
-						let largura = parseInt(canvas.width/20);
-						let inicioY = canvas.height;
-						let inicioX = canvas.width;
-						contexto.beginPath();
-						for(let i = 0; i < canvas.width + largura ; i = i + largura)
-						{
-									console.log(largura)
-									console.log("inicio", i,0)
-									console.log("fim", i,inicioY)
-									contexto.moveTo(i, 0);
-									contexto.lineTo( i, inicioY);
-								}
-						for(let i = 0 ; i < canvas.height ; i += largura)
-						{
-									contexto.moveTo(0, i);
-									contexto.lineTo(inicioX, i);
-						}
-
-						contexto.stroke();
-
-					}
-
-			function desenhaCirculo(caminho, cor){
-						if(caminho.localizado == false)
-							return;
-						let x_r, y_r;
-						if(rotulo_vertice ){
-									contexto.font = "20px Arial";
-									contexto.fillStyle = "black";
-									contexto.fillText(caminho.nome, caminho.x, caminho.y-10);
-								}
-
-						if(selectVertice.indexOf(caminho.nome) >= 0){
-									contexto.beginPath();
-									contexto.arc(caminho.x, caminho.y, 8, 0 , 2 * Math.PI);
-									contexto.closePath();
-									contexto.fillStyle = "black";
-									contexto.fill();
-									contexto.stroke();
-								}
-
-						contexto.beginPath();
-						contexto.arc(caminho.x , caminho.y , 5, 0, 2 * Math.PI);
-						contexto.closePath();
-						contexto.fillStyle = cor;
-						contexto.strokeStyle = "black";
-						contexto.fill();
-						contexto.stroke();
-					}
-			function espera(tempo){
-						let inicio = new Date().getTime();
-						let fim = inicio;
-						while(fim < inicio + tempo) {
-									fim = new Date().getTime();
-								}
-					}
-
-			function desenhaCirculo2(caminho, cor){
-						contexto.beginPath();
-						contexto.arc(caminho.x , caminho.y , 5, 0, 2 * Math.PI);
-						contexto.closePath();
-						contexto.fillStyle = cor;
-						contexto.fill();
-						contexto.stroke();
-					}
-			function addPosicao(){
-						let nome = document.getElementById("nomeselecionado").value;
-						let teste = busca(nome);
-						if(  teste == null )
-							mapa.push(new Caminho(nome, posicaoMouse.x, posicaoMouse.y, [],[]));
-						atualizarCanvas();
-
-					}
-			function cliqueNaReta(a , b , c){
-				let  teste1, teste2, teste3;
-				let y  = yfuncaoXAB(a, b,c.x);
-				let x1, x2, y1,y2;
-				let folga = 15;
-				if(a.x >= b.x){
-					x2 = a.x;
-					x1 = b.x;
-				}else{
-					x2 = b.x;
-					x1 = a.x;
-				}
-
-				if(a.y >= b.y){
-					y2 = a.y;
-					y1 = b.y;
-				}else{
-					y2 = b.y;
-					y1 = a.y;
-				}
-
-				teste1 = Math.abs(c.y - y) <= folga;
-				teste2 = c.x >= x1-folga && c.x <= x2+folga;
-				teste3 = c.y >= y1-folga && c.y <= y2+folga;
-				//console.log("C(",a.nome, b.nome,")","a.x",a.x,"a.y",a.y,"b.x",b.x,"b.y", b.y,"c.x",c.x,"c.y",c.y, "y", y);
-				//console.log("dados_teste", x1, x2, y1, y2);
-				//console.log("teste1", teste1, "teste2", teste2, "teste3", teste3);
-				if ( teste1 && teste2 && teste3 )
-					return true;
-				return false;		
-			}
-
-			function pegarPosicaoMouse(){
-						let rect = canvas.getBoundingClientRect();
-						posicaoMouse.x = event.clientX - rect.left ; //- event.offsetX ; //event.pageX;
-						posicaoMouse.y = event.clientY - rect.top; //- event.offsetY;
-
-						//esta num ponto
-						let testevertice = false;
-						let testearesta = false;
-						let vertice = "";
-						let aresta = [];
-						let distancia;
-						let pontonareta;
-						let coordenadaAresta = [];
-						let pos;
-						let teste1;
-						let teste2;
-						let teste3;
-						let teste_reta;
-
-						for(let i = 0; i< mapa.length; i++)
-						{
-									distancia = distanciaEuclidianaAparaB(posicaoMouse, mapa[i]);
-									if( distancia <= 5 ){
-												vertice = mapa[i].nome;
-												testevertice = true;
-												break;
-											}
-
-								}
-						if( testevertice ==false ){
-						pontonareta = new Caminho();
-						for(let i = 0; i<mapa.length ; i++)
-						{
-							for(let j = 0; j < mapa[i].ligacoes.length ; j++)
-							{
-
-								pos = mapa.findIndex((obj) => obj.nome == mapa[i].ligacoes[j]);
-								pontonareta.x = xfuncaoXAB(mapa[i], mapa[pos], posicaoMouse.y)
-								pontonareta.y = yfuncaoXAB(mapa[i], mapa[pos], posicaoMouse.x);
-								teste1 = distanciaEuclidianaAparaB(posicaoMouse , pontonareta) < 10;
-								//teste1 = (posicaoMouse.y - pontonareta.y) < 6;
-								teste2 = posicaoMouse.x < mapa[pos].x;
-								teste3 = posicaoMouse.x > mapa[i].x;
-					//			console.log("Loop", i, mapa[i].nome, mapa[pos].nome);
-					//			console.log("Loop", i, mapa[i], mapa[pos]);
-					//			console.log("Loop", i , "posicaoMouse", posicaoMouse, "pontonareta", pontonareta);
-					//			console.log("Loop", i, "posicaoMouseteste 1" ,teste1, "teste2", teste2, "teste3", teste3);
-								teste_reta = cliqueNaReta(mapa[i],mapa[pos], posicaoMouse);
-								if(teste_reta ){
-									  //console.log("ACHOU ARESTA");
-									  testearesta = true;
-									  coordenadaAresta = [ mapa[i].nome, mapa[pos].nome];
-									  caminhoSelecionado = [];
-									  break;
-							  }
+	function direcionarDados(e){
+					let arquivo = e.target.files[0];
+					let string_json;
+					if(!arquivo)
+						return;
+					let dados = new FileReader();
+					dados.onload = function(e){
+								string_json = e.target.result;
+								setMapa(e.target.result);
 
 							}
-							if(testearesta == true)
-										break;
-						}
-							
-						}
+					dados.readAsText(arquivo);
+	}
+
+	function salvarMapa(){
+		if(mapa_nome.value.length < 1){
+					alert("Colocar o nome do mapa");
+					return;
+			}
+		let stringGravar = "{\"nome_mapa\" : \"" + mapa_nome.value + "\",\n";
+		if(mapa.length > 0 ){
+			stringGravar = stringGravar + "\t\"caminhos\":[";
+			for(let i = 0 ; i < mapa.length; i++)
+			{
+				if(i > 0 ) stringGravar = stringGravar + ",";
+					stringGravar = stringGravar + "\t\n{"
+					stringGravar = stringGravar + "\t\t\"nome\":\"" + mapa[i].nome + "\",\n";
+					stringGravar = stringGravar + "\t\t\"x\":"+ mapa[i].x + ",\n";
+					stringGravar = stringGravar + "\t\t\"y\":"+ mapa[i].y + ",\n";
+					stringGravar = stringGravar + "\t\t\"ligacoes\":[" ;
+					for(let x = 0; x < mapa[i].ligacoes.length; x++)
+					{	if(x > 0) stringGravar= stringGravar + ",";
+								stringGravar = stringGravar + "\"" + mapa[i].ligacoes[x] + "\"";
+							}
+					stringGravar = stringGravar + "],\n";
+					stringGravar = stringGravar + "\t\t\"ligacoes_distancias\":[";
+					for(let x = 0; x < mapa[i].ligacoes.length; x++)
+					{	
+						if(x > 0) stringGravar= stringGravar + ",";
+							stringGravar = stringGravar +  mapa[i].ligacoes_distancias[x] ;
+					}
+					stringGravar = stringGravar + "]\n"
+					stringGravar = stringGravar + "\t}";
+
+			}
+			stringGravar = stringGravar + "\n\t]"
+		}
+
+			stringGravar = stringGravar+ "\n}";
+			const file = new Blob([stringGravar], { type: 'text/plain' });
+			const link = document.createElement("a");
+			link.href = URL.createObjectURL(file);
+			link.download = "Mapa.json";
+			link.click();
+			return URL.revokeObjectURL(link.href);
+		}
 
 
-						if(testevertice){
-									selectVertice.push(vertice);
-									selectAresta = [];
-									nome_selecionado.value = vertice; 
-									if(selectVertice.length > 1){
-												let caminho1 = busca(selectVertice[0]);
-												let caminho2 = busca(selectVertice[1]);
-												if( caminho1 != null && caminho2 !=null)
-													distancia = distanciaEuclidianaAparaB(mapa[caminho1],mapa[caminho2]);
-												if( mapa[caminho1].ligacoes.indexOf(selectVertice[0]) < 0){
-															mapa[caminho1].ligacoes.push(selectVertice[1]);
-															mapa[caminho1].ligacoes_distancias.push(parseFloat(distancia.toFixed(2)));
+	function CarregarMapa(){
+		let inputfile = document.getElementById("abrir-arquivo");
+		let strFile ;
+		inputfile.click();
+		if(inputfile.files > 0){
+			strFile = inputfile.files[0].nome;
+			let leitor = new FileReader();
+		}
+	}
+	function distanciaEuclidianaAparaB(a, b){ //distancia entre dois caminhos conectados
+				let distancia = Math.sqrt(Math.pow((b.x - a.x),2) + Math.pow((b.y - a.y),2) ); 
+				return parseFloat(distancia);		//}else{
+	}
+	function coeficienteAngular(a,b){
+		let angulo = (b.y - a.y) / (b.x - a.x);
+		if (angulo == Number.POSITIVE_INFINITY)
+			angulo =0;
+		return angulo;
+	}
+	function coeficienteLinear(a,b){
+		let ca = coeficienteAngular(a,b);
+		return a.y - (ca * a.x);
+	}
+	function yfuncaoXAB(a, b, x){
+		return (x * coeficienteAngular(a, b)) + coeficienteLinear(a, b);
+	}
+	function xfuncaoXAB(a, b, y){
+		let resultado = (y - coeficienteLinear(a,b)) / coeficienteAngular(a,b);
+		if(resultado == Number.POSITIVE_INFINITY)
+				resultado = 0;
+		return resultado; 
+	}
 
-														}
-												if( mapa[caminho2].ligacoes.indexOf(selectVertice[1]) < 0){
-															mapa[caminho2].ligacoes.push(selectVertice[0]);
-															mapa[caminho2].ligacoes_distancias.push(parseFloat(distancia.toFixed(2)));
-														}
+	function desenhaLinha( coordenada1, coordenada2){
+		if(coordenada1.localizado == false || coordenada2.localizado == false)
+			return;
+		let x_r, y_r, distancia;
+		let index;
+		let selection;
+		let selection2;
+		let cordsel;
+		let cordsel2;
+		cordsel = [coordenada1.nome, coordenada2.nome];
+		cordsel2 = [coordenada2.nome, coordenada1.nome];
+		selection = caminhoSelecionado.findIndex((obj)=> obj.toString() == cordsel.toString());
+		selection1 = selectAresta.findIndex((obj)=> obj.toString() == cordsel.toString());
+		if(selection1 == -1)
+			selection1 = selectAresta.findIndex((obj)=> obj.toString() == cordsel2.toString());
+		if(selection == -1)
+			selection = caminhoSelecionado.findIndex((obj)=> obj.toString() == cordsel2.toString());
+			
+		if(rotulo_aresta ){
+			index = coordenada1.ligacoes.indexOf(coordenada2.nome);
+			distancia = coordenada1.ligacoes_distancias[index];
+			x_r = (coordenada2.x + coordenada1.x) /2;
+			y_r= x_r * coeficienteAngular(coordenada1, coordenada2) + coeficienteLinear(coordenada1,coordenada2); 
+			contexto.font = "18px Arial";
+			contexto.fillStyle = "black";
+			contexto.fillText(distancia, x_r, y_r);
+		}
+		contexto.beginPath();
+		contexto.moveTo(coordenada1.x, coordenada1.y);
 
-												selectVertice = [];
-												nome_selecionado.value = "";
-											}
-									atualizarCanvas();
-								}else if(testearesta){
-										  let teste_selection = selectAresta.findIndex((obj)=>
-											  obj.toString() == coordenadaAresta.toString());
-											//console.log("teste_selection",teste_selection,"coordenadaAresta", coordenadaAresta);
+		contexto.lineTo(coordenada2.x, coordenada2.y);
+		if(selection >= 0 ){
+			contexto.strokeStyle = "green";
+			contexto.lineWidth = 3;
+		}
+		else if (selection1 >= 0){
+			contexto.strokeStyle = "yellow";
+			contexto.lineWidth = 2;
+		}
+		else{
+			contexto.lineWidth = 0.1;
+			contexto.strokeStyle = "gray";
+		}
+
+		contexto.closePath();
+		contexto.fill();
+
+		contexto.stroke();
+	}
 
 
-											if(teste_selection == -1){
-												selectAresta.push(coordenadaAresta);
-											}
-											else{
-												selectAresta.splice(teste_selection,1);
-											}
-											if(selectAresta.length > 0)
-												tam_selecionado.value = tamDistanciaSelecionados();
-											//console.log("selectAresta", selectAresta);
-											nome_selecionado.value="Arestas(s)";
-											atualizarCanvas();
-										}
-						if(testevertice == false && testearesta == false){
-									selectVertice = [];
-									selectAresta = [];
-									tam_selecionado.value = "";
-									nome_selecionado.value = "";
-									atualizarCanvas();
-									desenhaCirculo(posicaoMouse , "black");
-								}
+	function desenhaCirculo(caminho, cor){
+		if(caminho.localizado == false)
+			return;
+		let x_r, y_r;
+		if(rotulo_vertice ){
+			contexto.font = "20px Arial";
+			contexto.fillStyle = "black";
+			contexto.fillText(caminho.nome, caminho.x, caminho.y-10);
+		}
+
+		if(selectVertice.indexOf(caminho.nome) >= 0){
+			contexto.beginPath();
+			contexto.arc(caminho.x, caminho.y, 8, 0 , 2 * Math.PI);
+			contexto.closePath();
+			contexto.fillStyle = "black";
+			contexto.fill();
+			contexto.stroke();
+		}
+
+		contexto.beginPath();
+		contexto.arc(caminho.x , caminho.y , 5, 0, 2 * Math.PI);
+		contexto.closePath();
+		contexto.fillStyle = cor;
+		contexto.strokeStyle = "black";
+		contexto.fill();
+		contexto.stroke();
+	}
+	function espera(tempo){
+		let inicio = new Date().getTime();
+		let fim = inicio;
+		while(fim < inicio + tempo) {
+			fim = new Date().getTime();
+		}
+	}
+
+	function desenhaCirculo2(caminho, cor){
+		contexto.beginPath();
+		contexto.arc(caminho.x , caminho.y , 5, 0, 2 * Math.PI);
+		contexto.closePath();
+		contexto.fillStyle = cor;
+		contexto.fill();
+		contexto.stroke();
+	}
+	function addPosicao(){
+		let nome = document.getElementById("nomeselecionado").value;
+		let teste = busca(nome);
+		if(  teste == null )
+			mapa.push(new Caminho(nome, posicaoMouse.x, posicaoMouse.y, [],[]));
+		atualizarCanvas();
+
+	}
+	function cliqueNaReta(a , b , c){
+		let  teste1, teste2, teste3;
+		let y  = yfuncaoXAB(a, b,c.x);
+		let x1, x2, y1,y2;
+		let folga = 15;
+		if(a.x >= b.x){
+			x2 = a.x;
+			x1 = b.x;
+		}else{
+			x2 = b.x;
+			x1 = a.x;
+		}
+
+		if(a.y >= b.y){
+			y2 = a.y;
+			y1 = b.y;
+		}else{
+			y2 = b.y;
+			y1 = a.y;
+		}
+		if(coeficienteAngular(a,b) == 0)
+			teste1 = true;
+		else
+			teste1 = Math.abs(c.y - y) <= folga;
+
+		teste2 = c.x >= x1-folga && c.x <= x2+folga;
+		teste3 = c.y >= y1-folga && c.y <= y2+folga;
+		if ( teste1 && teste2 && teste3 )
+			return true;
+		return false;		
+	}
+
+	function pegarPosicaoMouse(){
+		let rect = canvas.getBoundingClientRect();
+		posicaoMouse.x = event.clientX - rect.left ; //- event.offsetX ; //event.pageX;
+		posicaoMouse.y = event.clientY - rect.top; //- event.offsetY;
+		let testevertice = false;
+		let testearesta = false;
+		let vertice = "";
+		let aresta = [];
+		let distancia;
+		let coordenadaAresta = [];
+		let pos;
+		let teste_reta;
+		for(let i = 0; i< mapa.length; i++)
+		{
+			distancia = distanciaEuclidianaAparaB(posicaoMouse, mapa[i]);
+			if( distancia <= 5 ){
+				vertice = mapa[i].nome;
+				testevertice = true;
+				break;
+			}
+
+		}
+		if( testevertice == false ){
+			pontonareta = new Caminho();
+			for(let i = 0; i<mapa.length ; i++)
+			{
+				for(let j = 0; j < mapa[i].ligacoes.length ; j++)
+				{
+					pos = mapa.findIndex((obj) => obj.nome == mapa[i].ligacoes[j]);
+					teste_reta = cliqueNaReta(mapa[i],mapa[pos], posicaoMouse);
+					if(teste_reta ){
+						testearesta = true;
+						coordenadaAresta = [ mapa[i].nome, mapa[pos].nome];
+						caminhoSelecionado = [];
+						break;
+				  }
+				}
+				if(testearesta == true)
+							break;
+			}
+			
+		}
+
+
+		if(testevertice){
+			selectVertice.push(vertice);
+			selectAresta = [];
+			nome_selecionado.value = vertice; 
+			if(selectVertice.length > 1){
+				let caminho1 = busca(selectVertice[0]);
+				let caminho2 = busca(selectVertice[1]);
+				if( caminho1 != null && caminho2 !=null)
+					distancia = distanciaEuclidianaAparaB(mapa[caminho1],mapa[caminho2]);
+				if( mapa[caminho1].ligacoes.indexOf(selectVertice[0]) < 0){
+					mapa[caminho1].ligacoes.push(selectVertice[1]);
+					mapa[caminho1].ligacoes_distancias.push(parseFloat(distancia.toFixed(2)));
+
+				}
+				if( mapa[caminho2].ligacoes.indexOf(selectVertice[1]) < 0){
+					mapa[caminho2].ligacoes.push(selectVertice[0]);
+					mapa[caminho2].ligacoes_distancias.push(parseFloat(distancia.toFixed(2)));
+				}
+
+				selectVertice = [];
+				nome_selecionado.value = "";
+			}
+			atualizarCanvas();
+		}
+		else if(testearesta){
+				let teste_selection = selectAresta.findIndex((obj)=>
+										  obj.toString() == coordenadaAresta.toString());
+
+				if(teste_selection == -1)
+					selectAresta.push(coordenadaAresta);
+				else
+					selectAresta.splice(teste_selection,1);
+			if(selectAresta.length > 0){
+				tam_selecionado.value = tamDistanciaSelecionados();
+				nome_selecionado.value="Arestas(s)";
+				atualizarCanvas();
+			}
+		}
+		if(testevertice == false && testearesta == false){
+					selectVertice = [];
+					selectAresta = [];
+			tam_selecionado.value = "";
+			nome_selecionado.value = "";
+			atualizarCanvas();
+			desenhaCirculo(posicaoMouse , "black");
+		}
 					}
 			function busca(nome){
 						for(let i = 0; i < mapa.length; i++){
@@ -544,7 +482,6 @@
 
 				let index = mapa.findIndex( ( elemento ) => elemento.nome == a );
 				let acho = false;
-//				console.log("a=", a,"b=", b, "mapa=", mapa);
 
 				if (index >= 0 ){
 					for(let i = 0; i < mapa[index].ligacoes.length; i++)
@@ -564,7 +501,6 @@
 			function tamDistanciaSelecionados(){
 				let distancia = 0.00;
 				let ligacao;
-				//console.log("selectAresta", selectAresta);
 				for(let i = 0 ; i < selectAresta.length ; i++){
 					ligacao = selectAresta[i];
 
@@ -575,7 +511,6 @@
 			function tamDistanciaSelecionados2(caminhoSel){
 				let distancia = 0.00;
 				let ligacao;
-				//console.log("selectAresta", selectAresta);
 				for(let i = 0 ; i < caminhoSel.length ; i++){
 					ligacao = caminhoSel[i];
 
@@ -595,19 +530,12 @@
 													desenhaLinha(mapa[i], mapa[index] );			
 											}
 								}
-					}
-	/*
-			function atualizarParticulas(){
-						for (let i= 0; i< mapa.particulas.length ; i++){
-									desenhaCirculo2(mapa.particulas[i], "yellow");
-								}
-					}*/
+			}
 			function atualizarCanvas(){
 						contexto.clearRect(0,0, canvas.width, canvas.height);
 						atualizarCaminhosNoCanvas();
 						msg_erro.innerHTML = "";
-						//atualizarParticulas();
-					}
+			}
 
 
 
@@ -670,58 +598,78 @@
 
 
 
-		function executarPSO(){
-					num_populacao = document.getElementById ("num_populacao").value;
-					num_interacoes = document.getElementById("num_interacoes").value;
-					let div_resolucao = document.getElementById("resolucao");
-					const exp_num = /[0-9]/;
-					atualizarCanvas();	
-					if( mapa.length < 1){
-								msg_erro.innerHTML += "Você tem que carregar ou criar um mapa para rodar o PSO";
-								return;
-							}
-					if( !exp_num.test(num_populacao) && num_populacao.length < 1){
-								msg_erro.innerHTML += "Preencha o campo população com número;";
-								return;
-							}
-					if( !exp_num.test(num_interacoes) && num_interacoes.length < 1){
-								msg_erro.innerHTML += "Preencha o campo interações com número;";
-								return;
-							}
+	function executarPSO(){
+		num_populacao = document.getElementById ("num_populacao").value;
+		num_interacoes = document.getElementById("num_interacoes").value;
+		let div_resolucao = document.getElementById("resolucao");
+		const exp_num = /[0-9]/;
+		atualizarCanvas();	
+		if( mapa.length < 1){
+			msg_erro.innerHTML += "Você tem que carregar ou criar um mapa para rodar o PSO";
+			return;
+		}
+		if( !exp_num.test(num_populacao) && num_populacao.length < 1){
+			msg_erro.innerHTML += "Preencha o campo população com número;";
+			return;
+		}
+		if( !exp_num.test(num_interacoes) && num_interacoes.length < 1){
+			msg_erro.innerHTML += "Preencha o campo interações com número;";
+			return;
+		}
 
-					caminhoselecionado = [];
-					selectaresta = [];
-					pso = new PSO(mapa, num_populacao , num_interacoes );
-					//console.log("populacao", num_populacao, "interecoes", num_interacoes,"mapa", mapa);
-					pso.solucionar();
-					let strhtml;
-					//console.log("pso.g.length", pso.g.length);
-					if(pso.g.length < 1){
-								strhtml = "<h2>Não foi localizada uma solução para o problema do caixo viajante (pcv)";
-								strhtml += " usando pso com uma populção de " +  num_populacao + " e ";
-								strhtml += num_interacoes +" interações </h2>";
-								div_resolucao.innerHTML = strhtml;
-							}else{	
-										selectAresta =[];
-										caminhostr=[]
-										let strhtml = "<table>";
-										strhtml += "<tr><th>Distancia</th><th>X</th><th>Caminho</th></tr>"
-										for(let i= 0 ; i < pso.g.length ; i++){
-													caminhostr.push(pso.g[i].caminho.toString()); 
-													strhtml += "<tr>";
-													strhtml += "<td>" + parseFloat(pso.g[i].menor).toFixed(2) + "</td>";
-													strhtml += "<td>" + pso.g[i].posicao+ "</td>";
-													strhtml += "<td><a href=\"#\" onclick=\"SelecionarSolucao(caminhostr["+i+"]);\">";
-													strhtml += caminhostr[i] +  "</a></td>";
-													strhtml += "</tr>";
-												}
-										strhtml += "</table>";
-										div_resolucao.innerHTML = strhtml;
-									}
+		caminhoselecionado = [];
+		selectaresta = [];
+		pso = new PSO(mapa, num_populacao , num_interacoes );
+		pso.solucionar();
+		let strhtml;
+		if(pso.g.length < 1){
+			strhtml = "<h2>Não foi localizada uma solução para o problema do caixo viajante (PCV)";
+			strhtml += " usando o algoritmo PSO com uma população de " +  num_populacao + " individuos(s) e ";
+			strhtml += num_interacoes +" loop(s) </h2>";
+			div_resolucao.innerHTML = strhtml;
+		}else{	
+			selectAresta =[];
+			caminhostr=[]
+			let strhtml = "<table>";
+			strhtml += "<tr><th>Distancia</th><th>X</th><th>Caminho</th></tr>"
+			for(let i= 0 ; i < pso.g.length ; i++){
+				caminhostr.push(pso.g[i].caminho.toString()); 
+				strhtml += "<tr>";
+				strhtml += "<td>" + parseFloat(pso.g[i].menor).toFixed(2) + "</td>";
+				strhtml += "<td>" + pso.g[i].posicao+ "</td>";
+				strhtml += "<td><a href=\"#\" onclick=\"SelecionarSolucao(caminhostr["+i+"]);\">";
+				strhtml += caminhostr[i] +  "</a></td>";
+				strhtml += "</tr>";
+			}
+			strhtml += "</table>";
+			div_resolucao.innerHTML = strhtml;
+		}
+	}
 
-				}
+		let div_resolucao;
+		let caminhostr = []; 	
+		let num_interacoes;
+		let num_populacao;
+		let canvas;
+		let contexto;
+		let mapa = [];
+		let posicaoMouse = new Caminho( 0, 0,[], []);
+		let selectVertice;
+		let selectAresta;
+		let selectArestatam;
+		let arestasDesenhadas;
+		let caminhoSelecionado;
+		let campo_remover;
+		let nome_selecionado;
+		let mapa_nome;
+		let rotulo_aresta;
+		let rotulo_vertice;
+		let selecionado; //para mudar o mapa
+		let mouse_element;
+		let posicaoMouseStatus = new Caminho( 0, 0,[], []);
+		let msg_erro;
 
-			window.onload = function(){
+		window.onload = function(){
 					canvas = document.getElementById("meucanvas");
 					contexto = canvas.getContext("2d");
 					canvas.width = canvas.offsetWidth;
@@ -748,27 +696,4 @@
 					mapa_nome.value="";
 					rotulo_aresta = true;
 					rotulo_vertice = true;
-				}
-		let div_resolucao;
-		let caminhostr = []; 	
-		let num_interacoes;
-		let num_populacao;
-		let canvas;
-		let contexto;
-		let mapa = [];
-		let posicaoMouse = new Caminho( 0, 0,[], []);
-		let selectVertice;
-		let selectAresta;
-		let selectArestatam;
-		let arestasDesenhadas;
-		let caminhoSelecionado;
-		let campo_remover;
-		let nome_selecionado;
-		let mapa_nome;
-		let rotulo_aresta;
-		let rotulo_vertice;
-		let selecionado; //para mudar o mapa
-		let mouse_element;
-		let posicaoMouseStatus = new Caminho( 0, 0,[], []);
-		let msg_erro;
-
+		}

@@ -29,6 +29,7 @@ const PSO = class {
 
 		for(let i = 0; i< populacao; i++){
 			this.x.push(parseInt(Math.random() * (this.caminhos.length-0) + 0)); // limites de x
+			this.p.push(parseInt(Math.random() * (this.caminhos.length - 0)+ 0));
 		}
 		this.vertices = []
 		for(let i = 0; i < this.caminhos.length; i++)
@@ -65,7 +66,7 @@ const PSO = class {
 		if(pos >= copia.length)
 			i = parseInt(pos % vetor.length);
 		else
-		i = parseInt(copia.length - (pos+1));
+		i = pos ;//parseInt(copia.length - (pos+1));
 		anterior = copia[i]
 		distribuicao.push(anterior);
 		copia.splice(i,1)
@@ -96,7 +97,7 @@ const PSO = class {
 			//this.c2 = Math.random() * (0.99-0.01) + 0.01;
 			this.w = Math.random() * (1 - 0) + (0.1); 
 			parte1 = this.w * this.v[this.v[i]];
-			parte2 = this.c1 * this.r1  * ( this.p[i] - this.x[i] );
+			parte2 = this.c1 * this.r1  * ( this.p[i][0] - this.x[i] );
 			parte3 =  this.c2 * this.r2 * (this.g[0].posicao - this.x[i]);
 
 			this.v[i] = parte1 + parte2 + parte3; 
@@ -126,7 +127,7 @@ const PSO = class {
 				menor = distancia;
 				i_menor = i;
 				menor_caminho = caminho;
-				this.p = [i_menor, caminho];
+				this.p[i] = [i_menor, caminho];
 			}
 		}
 		let duplicado = this.g.findIndex( (objeto) => objeto.caminho.toString() == menor_caminho.toString() );
