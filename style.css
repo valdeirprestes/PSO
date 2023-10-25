@@ -1,3 +1,4 @@
+@media all and (min-width: 481px){
 div.principal{
 	height: 100%;
 	background-color : azure;
@@ -33,6 +34,7 @@ label, input{
 	width:100px;
 }
 input.input_checkbox{
+	width:20px;
 }
 fieldset{
 	width : 500px;
@@ -75,7 +77,8 @@ img{
 	margin: 0px auto;
 }
 
-@media screen and (max-width: 480px){
+}
+@media all and (min-width:300px) and (max-width: 480px){
 div.principal{
 	height: 100%;
 	background-color : azure;
@@ -108,9 +111,10 @@ div.resolucao{
 	background-color : white;
 }
 label, input{
-	width:100px;
+	width:40px;
 }
 input.input_checkbox{
+	width: 20px;
 }
 td{
 	padding: 5px 20px;
