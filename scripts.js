@@ -696,4 +696,6 @@
 					mapa_nome.value="";
 					rotulo_aresta = true;
 					rotulo_vertice = true;
+					selecionado.value = "mapa2";
+					mudarMapa();
 		}
