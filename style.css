@@ -1,4 +1,7 @@
 @media  (hover:hover) and (min-width: 481px){
+body{
+	font-size: 18px;
+}
 div.principal{
 	height: 100%;
 	background-color : azure;
@@ -79,6 +82,9 @@ img{
 
 }
 @media (pointer:coarse) {
+body{
+	font-size: 30px;
+}
 div.principal{
 	height: 100%;
 	background-color : azure;
@@ -86,13 +92,13 @@ div.principal{
 		flex-direction : column;
 }
 div.descricao{
-	width:480px;
+	width:375px;
 	background-color : black;
 	color : white;
 }
 div.canvasdiv{
-	 width : 480px;
-	 height: 853px;
+	 width : 375px;
+	 height: 670px;
 	 background-color : LightGray;
 	 border : 1px solid black;
 	 padding: 10px;
@@ -105,8 +111,8 @@ div.resolucao{
 }
 
 #meucanvas{
-	width: 480px;
-	height: 480px;
+	width: 375px;
+	height:375px;
 	border: 1px solid black;
 	background-color : white;
 }
