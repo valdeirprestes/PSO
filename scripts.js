@@ -637,7 +637,7 @@
 				strhtml += "<tr>";
 				strhtml += "<td>" + parseFloat(pso.g[i].menor).toFixed(2) + "</td>";
 				strhtml += "<td>" + pso.g[i].posicao+ "</td>";
-				strhtml += "<td><a href=\"#\" onclick=\"SelecionarSolucao(caminhostr["+i+"]);\">";
+				strhtml += "<td><a href=\"javascript:SelecionarSolucao(caminhostr["+i+"]);\">";
 				strhtml += caminhostr[i] +  "</a></td>";
 				strhtml += "</tr>";
 			}
