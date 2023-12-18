@@ -102,14 +102,10 @@
 						let copia;
 						let index;
 						let index2;
-						//console.log("selectAresta", selectAresta);
-						//console.log("mapa", mapa);	
 							while (  selectAresta.length > 0){
 							copia = selectAresta[0];
-							//console.log("copia", copia);
 							index = mapa.findIndex((obj)=> obj.nome.toString() == copia[0].toString());
 							index2 = mapa[index].ligacoes.findIndex((obj2)=> obj2 == copia[1]);
-							//console.log("index", index,"index2", index2);
 							if(index2 > -1){
 								mapa[index].ligacoes.splice(index2,1);
 								mapa[index].ligacoes_distancias.splice(index2,1);
@@ -221,9 +217,9 @@
 			let leitor = new FileReader();
 		}
 	}
-	function distanciaEuclidianaAparaB(a, b){ //distancia entre dois caminhos conectados
+	function distanciaEuclidianaAparaB(a, b){
 				let distancia = Math.sqrt(Math.pow((b.x - a.x),2) + Math.pow((b.y - a.y),2) ); 
-				return parseFloat(distancia);		//}else{
+				return parseFloat(distancia);
 	}
 	function coeficienteAngular(a,b){
 		let angulo = (b.y - a.y) / (b.x - a.x);
@@ -381,8 +377,8 @@
 
 	function pegarPosicaoMouse(){
 		let rect = canvas.getBoundingClientRect();
-		posicaoMouse.x = event.clientX - rect.left ; //- event.offsetX ; //event.pageX;
-		posicaoMouse.y = event.clientY - rect.top; //- event.offsetY;
+		posicaoMouse.x = event.clientX - rect.left ;
+		posicaoMouse.y = event.clientY - rect.top;
 		let testevertice = false;
 		let testearesta = false;
 		let vertice = "";
